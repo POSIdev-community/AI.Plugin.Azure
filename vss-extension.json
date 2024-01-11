@@ -9,16 +9,61 @@
       "id": "Microsoft.VisualStudio.Services"
     }
   ],
-  "description": "Tools for code analysis. Includes one task.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/POSIdev-community/AI.Plugin.Azure.git"
+  },
+  "links": {
+    "getstarted": {
+      "uri": "https://github.com/POSIdev-community/AI.Plugin.Azure/blob/master/README.md"
+    },
+    "support": {
+      "uri": "https://github.com/POSIdev-community/AI.Plugin.Azure/issues"
+    }
+  },
+  "description": "Security Analysis",
   "categories": [
     "Azure Pipelines"
   ],
+  "tags": [
+		"JavaScript",
+		"Java",
+		"TypeScript",
+		"Php",
+    "C",
+    "C++",
+    "C#",
+    "Go",
+		"Python",
+    "Kotlin",
+    "Objective-C",
+    "SQL",
+    "Swift",
+    "Visual Basic",
+    "nodejs",
+		"SAST",
+		"Static Code Analysis",
+		"Code Analysis",
+		"DevSecOps",
+		"Code Security",
+		"Security Testing"
+	],
+  "content": {
+    "details": {
+        "path": "README.md"
+    }
+  },
+  "public": true,
   "icons": {
     "default": "images/extension-icon.png"
   },
   "files": [
     {
       "path": "src"
+    },
+    {
+      "path": "images",
+      "addressable": true
     }
   ],
   "contributions": [

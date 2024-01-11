@@ -25,7 +25,7 @@ To upload the plugin to Marketplace:
 
 1. Go to your organization's settings page.
 
-2. On the main menu, click ![pic](/images/readme/browse_marketplace.png) and select **Browse Marketplace**.
+2. On the main menu, click ![pic](images/readme/browse_marketplace.png) and select **Browse Marketplace**.
 
 3. Find **PT Application Inspector** plugin.
 
@@ -35,7 +35,7 @@ To upload the plugin to Marketplace:
 
 The plugin is now installed.
 
-![Installed PT Application Inspector plugin](/images/readme/installed_pluding.png)
+![Installed PT Application Inspector plugin](images/readme/installed_pluding.png)
 
 **Creating a pipeline**
 
@@ -77,12 +77,12 @@ To set up a project task:
 
 1. Under **PT Application Inspector** in the **Server Address** box, specify the PT AI Enterprise Server address.
 
-   ![Configuring the plugin settings](/images/readme/configure_plugin_settings.png)
+   ![Configuring the plugin settings](images/readme/configure_plugin_settings.png)
 2. In the **Access token** box, enter the access token for the CI/CD plugins created earlier.
 
 3. If you want to start a new scan, in the **Action** list, select **Scan a project**.
 
-4. To check the status of the current scan, in the **Action** list, select **Check scan results**, and then enter values in the**Project ID** and **Scan result ID** boxes.
+4. To check the status of the current scan, in the **Action** list, select **Check scan results**, and then enter values in the **Project ID** and **Scan result ID** boxes.
 
 5. If you need to run a vulnerability check and you want to wait for the scan to finish, in the **Scan type** list, select **Get full information about scan**.
 
@@ -94,12 +94,65 @@ To set up a project task:
 
 9. If you want to create a configuration file with the scan settings at the build stage, in the **Settings** list, select **Custom**.
 
-Example of the `azure-pipelines.yml` file:
+Example of the `azure-pipelines.yml` file with scan settings:
 
 ```
--  task: application-inspector-devops@0
-    inputs:
-serverAddress: 'https://server_address'
+- task: application-inspector-devops@0
+  inputs:
+    serverAddress: 'https://server_address'
+    token: '<token_for_AISA>'
+    actionMode: 'scan'
+    settingsType: 'enterNew'
+    newSettings: |
+      {
+        "$schema": "https://json.schemastore.org/aiproj-1.1.json",
+        "Version": "1.1",
+        "ProjectName": "<project_name>",
+        "ProgrammingLanguage": "Java",
+        "ScanModules": [
+            "DataFlowAnalysis"
+        ],
+        "CustomParameters": null,
+        "UseSastRules": false,
+        "UseCustomPmRules": false,
+        "UseSecurityPolicies": false,
+        "SkipGitIgnoreFiles": false,
+        "UsePublicAnalysisMethod": true,
+        "DownloadDependencies": true,
+        "JavaSettings": {
+            "Parameters": "",
+            "UnpackUserPackages": false,
+            "UserPackagePrefixes": "",
+            "Version": "v1_8"
+        },
+        "MailingProjectSettings": {
+            "Enabled": false,
+            "MailProfileName": null,
+            "EmailRecipients": []
+        }
+      }
+    html: true
+    sarif: true
+```
+
+## Configuring a security policy
+
+To edit the security policy:
+
+1. Under **PT Application Inspector**, select **Strict policy mode** to stop the pipeline if the scanned application does not comply with the set security policy.
+
+2. If you want to use an existing security policy rule, in the **Security policy** list, select **Existing**.
+
+3. If you want to add a new security policy rule or use a template, in the **Security policy** list, select **New**.
+
+***Note.** In addition, you must check that **Check for compliance with the security policy** is selected in the web interface or the `“UseSecurityPolicies: true”` parameter is specified in the configuration file.*
+
+Example of the `azure-pipelines.yml` file with security policy rules:
+
+```
+- task: application-inspector-devops@0
+  inputs:
+    serverAddress: 'https://server_address'
     token: '<token_for_AISA>'
     actionMode: 'scan'
     policyScanType: 'enterNew'
@@ -121,20 +174,8 @@ serverAddress: 'https://server_address'
         }
       ]
     html: true
-    md: true
+    sarif: true
 ```
-
-## Configuring a security policy
-
-To edit the security policy:
-
-1. Under **PT Application Inspector**, select **Strict policy mode** to stop the pipeline if the scanned application does not comply with the set security policy.
-
-2. If you want to use an existing security policy rule, in the **Security policy** list, select **Existing**.
-
-3. If you want to add a new security policy rule or use a template, in the **Security policy** list, select **New**.
-
-***Note.** In addition, you must check that **Check for compliance with the security policy** is selected in the web interface or the `“UseSecurityPolicies: true”` parameter is specified in the configuration file.*
 
 ## Configuring logging
 
@@ -150,11 +191,22 @@ To configure logging:
 
 ## Reports
 
-After the pipeline finishes running, scan reports are available. By clicking build artifacts, you can download the reports in the formats specified during the configuration of the `azure-pipelines.yml` file. The following formats are available for downloading: "Scan results report HTML", "Scan results SARIF report", "OWASP top 10 2021 report", "Autocheck report", "PCI DSS 3.2 report",  "NIST 800-53 Rev. 4 report", "SANS top 25 report", "OWASP mobile top 10 2016 report", "Report EAL4 (GOST 15408-3)", "Scan results JSON report" and "Scan results XML report".
+After the pipeline finishes running, scan reports are available. By clicking build artifacts, you can download the reports in the formats specified during the configuration of the `azure-pipelines.yml` file. The following formats are available for downloading: 
+* Scan results report HTML
+* Scan results SARIF report
+* Autocheck report
+* OWASP top 10 2021 report
+* PCI DSS 3.2 report
+* NIST 800-53 Rev. 4 report
+* SANS top 25 report
+* OWASP mobile top 10 2016 report
+* Report EAL4 (GOST 15408-3)
+* Scan results JSON report
+* Scan results XML report
 
 To view the default MD report, go to **Pipelines** → **Runs** → **Descriptions** → **Extensions**.
 
-![MD report](/images/readme/md_report.png)
+![MD report](images/readme/md_report.png)
 
 ## Requirements
 
