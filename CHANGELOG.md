@@ -11,3 +11,4 @@
     - EAL4 (GOST 15408-3)
     - PCI DSS 3.2.
 - Changed scan start parameters related to reports. Instead of `--reports` and `--report-type`, now only the `--report` parameter is used.
+- The plugin is now available in Visual Studio Marketplace.
