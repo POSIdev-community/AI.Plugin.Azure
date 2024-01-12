@@ -3,7 +3,7 @@
   "id": "application-inspector-devops",
   "name": "PT Application Inspector",
   "version": "1.2.0",
-  "publisher": "ptaitest",
+  "publisher": "POSIdev-community",
   "targets": [
     {
       "id": "Microsoft.VisualStudio.Services"
