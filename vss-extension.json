@@ -1,0 +1,81 @@
+{
+  "manifestVersion": 1,
+  "id": "application-inspector-devops",
+  "name": "PT Application Inspector",
+  "version": "1.2.0",
+  "publisher": "POSIdev-community",
+  "targets": [
+    {
+      "id": "Microsoft.VisualStudio.Services"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/POSIdev-community/AI.Plugin.Azure.git"
+  },
+  "links": {
+    "getstarted": {
+      "uri": "https://github.com/POSIdev-community/AI.Plugin.Azure/blob/master/README.md"
+    },
+    "support": {
+      "uri": "https://github.com/POSIdev-community/AI.Plugin.Azure/issues"
+    }
+  },
+  "description": "Security Analysis",
+  "categories": [
+    "Azure Pipelines"
+  ],
+  "tags": [
+    "JavaScript",
+    "Java",
+    "TypeScript",
+    "Php",
+    "C",
+    "C++",
+    "C#",
+    "Go",
+    "Python",
+    "Kotlin",
+    "Objective-C",
+    "SQL",
+    "Swift",
+    "Visual Basic",
+    "nodejs",
+    "SAST",
+    "Static Code Analysis",
+    "Code Analysis",
+    "DevSecOps",
+    "Code Security",
+    "Security Testing"
+  ],
+  "content": {
+    "details": {
+        "path": "README.md"
+    }
+  },
+  "public": true,
+  "icons": {
+    "default": "images/extension-icon.png"
+  },
+  "files": [
+    {
+      "path": "src"
+    },
+    {
+      "path": "images",
+      "addressable": true
+    }
+  ],
+  "contributions": [
+    {
+      "id": "custom-build-release-task",
+      "type": "ms.vss-distributed-task.task",
+      "targets": [
+        "ms.vss-distributed-task.tasks"
+      ],
+      "properties": {
+        "name": "src"
+      }
+    }
+  ]
+}

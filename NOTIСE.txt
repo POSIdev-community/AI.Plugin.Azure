@@ -1,0 +1,8 @@
+This product includes the software developed by third-party:
+
+ * azure-pipelines-task-lib: https://github.com/Microsoft/azure-pipelines-task-lib (MIT License)
+ * guid-typescript: https://github.com/snico-dev/guid-typescript (ISC License)
+ * types/node: https://github.com/DefinitelyTyped/DefinitelyTyped (MIT License)
+ * types/q: https://github.com/DefinitelyTyped/DefinitelyTyped (MIT License)
+ * typescript: https://github.com/Microsoft/TypeScript (Apache-2.0 License)
+ * vss-web-extension-sdk: https://github.com/Microsoft/vss-web-extension-sdk (MIT License)
