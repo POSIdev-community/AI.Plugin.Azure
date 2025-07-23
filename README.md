@@ -75,33 +75,38 @@ To set up a project task:
 
    ***Note.** If you want to scan large projects that take a long time to scan, you must set the scan task timeout in the `azure-pipelines.yml` file manually. The default value is 60 minutes. For example, `timeoutInMinutes 360 report`.*
 
-1. Under **PT Application Inspector** in the **Server Address** box, specify the PT AI Enterprise Server address.
+7. Under **PT Application Inspector** in the **Server Address** box, specify the PT AI Enterprise Server address.
 
    ![Configuring the plugin settings](images/readme/configure_plugin_settings.png)
-2. In the **Access token** box, enter the access token for the CI/CD plugins created earlier.
+8. In the **Access token** box, enter the access token for the CI/CD plugins created earlier.
 
-3. If you want to start a new scan, in the **Action** list, select **Scan a project**.
+9. If you want to start a new scan, in the **Action** list, select **Scan a project**.
 
-4. To check the status of the current scan, in the **Action** list, select **Check scan results**, and then enter values in the **Project ID** and **Scan result ID** boxes.
+10. To check the status of the current scan, in the **Action** list, select **Check scan results**, and then enter values in the **Project ID** and **Scan result ID** boxes.
 
-5. If you need to run a vulnerability check and you want to wait for the scan to finish, in the **Scan type** list, select **Get full information about scan**.
+11. If you need to run a vulnerability check and you want to wait for the scan to finish, in the **Scan type** list, select **Get full information about scan**.
 
-6. If you need to run a vulnerability check and continue running the pipeline without waiting for the scan to finish, in the **Scan type** list, select **Send scan on server and end task**.
+12. If you need to run a vulnerability check and continue running the pipeline without waiting for the scan to finish, in the **Scan type** list, select **Send scan on server and end task**.
 
-7. In the **Project name** box, enter the name of the project created in the PT AI web interface.
+13. In the **Project name** box, enter the name of the project created in the PT AI web interface.
 
-8. If a scan project is already configured in the PT AI web interface, in the **Settings** list, select **Default**.
+14. In the **Branch at PT AI Server** list, select:
+ - **From pipeline environment** if the name of the scanned branch is specified in the pipeline environment variable.
+ - **Custom branch** if you need to specify a branch manually (enter a name in the **Branch name** field).
 
-9. If you want to create a configuration file with the scan settings at the build stage, in the **Settings** list, select **Custom**.
+15. If a scan project is already configured in the PT AI web interface, in the **Settings** list, select **Default**.
+
+16.  If you want to create a configuration file with the scan settings at the build stage, in the **Settings** list, select **Custom**.
 
 Example of the `azure-pipelines.yml` file with scan settings:
 
 ```
-- task: application-inspector-devops@0
+- task: application-inspector-devops-plugin@0
   inputs:
     serverAddress: 'https://server_address'
     token: '<token_for_AISA>'
     actionMode: 'scan'
+    branchAtServer: 'fromEnvironment'
     settingsType: 'enterNew'
     newSettings: |
       {
@@ -150,11 +155,12 @@ To edit the security policy:
 Example of the `azure-pipelines.yml` file with security policy rules:
 
 ```
-- task: application-inspector-devops@0
+- task: application-inspector-devops-plugin@0
   inputs:
     serverAddress: 'https://server_address'
     token: '<token_for_AISA>'
     actionMode: 'scan'
+    branchAtServer: 'fromEnvironment'
     policyScanType: 'enterNew'
     newPolicies: |
       [
