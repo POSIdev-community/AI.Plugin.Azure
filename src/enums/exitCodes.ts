@@ -44,4 +44,4 @@ export enum ExitCodes {
     FalseInitKeeper = -1,
 
     UnknownError = 1000
-};
+}

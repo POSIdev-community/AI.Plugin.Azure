@@ -11,4 +11,4 @@ export enum Report {
     owaspm = 'owaspm',
     pcidss = 'pcidss',
     sans = 'sans',
-};
+}

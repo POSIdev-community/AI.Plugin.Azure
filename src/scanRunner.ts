@@ -2,11 +2,11 @@ import * as Task from 'azure-pipelines-task-lib/task';
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import {Report} from './enums/reportTypes';
-import {ExitCodes} from './enums/exitCodes';
-import {ActionMode} from "./enums/actionMode";
-import {ScanTaskContext} from './models/scanTaskContext';
-import {MessageMode} from "./enums/messageMode";
+import { ActionMode } from "./enums/actionMode";
+import { ExitCodes } from './enums/exitCodes';
+import { MessageMode } from "./enums/messageMode";
+import { Report } from './enums/reportTypes';
+import { ScanTaskContext } from './models/scanTaskContext';
 
 export class ScanRunner {
 
@@ -41,8 +41,11 @@ export class ScanRunner {
             '--project-id',
             this.scanTaskContext.projectID,
             '--scan-result-id',
-            this.scanTaskContext.scanResultID)
+            this.scanTaskContext.scanResultID
+        );
         if (this.scanTaskContext.messageMode == MessageMode.One) scanArgs.push('--no-wait');
+
+        console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
         let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
         scanProcess.on('exit', () => {
             if (scanProcess.exitCode != ExitCodes.Ok) {
@@ -52,20 +55,28 @@ export class ScanRunner {
     }
 
     private startScan(scanArgs: string[]) {
-        scanArgs.push('--project-name',
-            this.scanTaskContext.projectName,
+        scanArgs.push(
+            '--project-name',
+            `"${this.scanTaskContext.projectName}"`,
             '--scan-target',
-            this.scanTaskContext.scanDirectory,
-            '--create-project');
+            `"${this.scanTaskContext.scanDirectory}"`,
+            '--create-project',
+            '--create-branch',
+        );
 
         if (this.scanTaskContext.settingsPath) {
             scanArgs.push('--project-settings-file');
-            scanArgs.push(this.scanTaskContext.settingsPath);
+            scanArgs.push(`"${this.scanTaskContext.settingsPath}"`);
         }
 
         if (this.scanTaskContext.policyPath) {
             scanArgs.push('--policies-path');
-            scanArgs.push(this.scanTaskContext.policyPath);
+            scanArgs.push(`"${this.scanTaskContext.policyPath}"`);
+        }
+
+        if (this.scanTaskContext.branchName && this.scanTaskContext.branchName.trim() !== '') {
+            scanArgs.push('--branch-name');
+            scanArgs.push(`"${this.scanTaskContext.branchName}"`);
         }
 
         scanArgs.push('--log-level');
@@ -74,6 +85,7 @@ export class ScanRunner {
         if (this.scanTaskContext.syncMode == 'async') {
             scanArgs.push('--no-wait');
 
+            console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
             let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
 
             scanProcess.on('exit', () => {
@@ -87,7 +99,7 @@ export class ScanRunner {
 
         if (this.scanTaskContext.reportTypes) {
             scanArgs.push('--reports-folder');
-            scanArgs.push(this.scanTaskContext.reportsFolder);
+            scanArgs.push(`"${this.scanTaskContext.reportsFolder}"`);
             scanArgs.push('--report');
             scanArgs.push(this.scanTaskContext.reportTypes);
             if (this.moreThanOnlyOneMarkdownReport()) {
@@ -107,6 +119,7 @@ export class ScanRunner {
             }
         }
 
+        console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
         let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
 
         scanProcess.on('exit', () => {

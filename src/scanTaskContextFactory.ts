@@ -1,10 +1,11 @@
+import * as Task from 'azure-pipelines-task-lib/task';
+import { BranchType } from './enums/branchType';
+import { PolicyType } from './enums/policyType';
+import { Report } from './enums/reportTypes';
+import { SettingsType } from './enums/settingsType';
 import { ScanTaskContext } from './models/scanTaskContext';
 import { PoliticManager } from './politicManager';
 import { SettingsManager } from './settingsManager';
-import { Report } from './enums/reportTypes';
-import { SettingsType } from './enums/settingsType';
-import { PolicyType } from './enums/policyType';
-import * as Task from 'azure-pipelines-task-lib/task';
 
 export class ScanTaskContextFactory {
 
@@ -17,8 +18,9 @@ export class ScanTaskContextFactory {
             : Task.getVariable('Build.Repository.Name');
 
         const artifactsFolder = Task.getVariable('Build.ArtifactStagingDirectory');
+        const branch = Task.getVariable('Build.SourceBranchName');
 
-        if (!projectName || !directory || !artifactsFolder) {
+        if (!projectName || !directory || !artifactsFolder || !branch) {
             throw new Error('System variable error');
         }
 
@@ -34,6 +36,10 @@ export class ScanTaskContextFactory {
         const projectID = Task.getInput('projectID');
         const scanResultID = Task.getInput('scanResultID');
 
+        const branchName = (Task.getInput('branchAtServer') === BranchType.Existing)
+            ? branch
+            : Task.getInput('customBranchName');
+
         const messageMode = Task.getInput('messageMode');
 
         const settingsPath = this.getSettingsPath();
@@ -48,7 +54,24 @@ export class ScanTaskContextFactory {
 
         const policyFail = Task.getBoolInput('policyFail');
 
-        return new ScanTaskContext(projectName!, directory!, serverAddress!, token!, actionMode!, projectID!, scanResultID!, messageMode!, settingsPath, policyPath, syncMode!, loglevel!, reportTypes, reportsFolder!, policyFail);
+        return new ScanTaskContext(
+            projectName!,
+            directory!,
+            serverAddress!,
+            token!,
+            actionMode!,
+            projectID!,
+            branchName,
+            scanResultID!,
+            messageMode!,
+            settingsPath,
+            policyPath,
+            syncMode!,
+            loglevel!,
+            reportTypes,
+            reportsFolder!,
+            policyFail
+        );
     }
 
     private getSettingsPath(): string | null {

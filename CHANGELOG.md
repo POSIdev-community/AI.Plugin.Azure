@@ -1,3 +1,10 @@
+## [1.3.0]
+
+- Added support for AI.Shell 5.0.0.
+- Added the 'Branch at PT AI Server' parameter to the project task. You can select one of the two options:
+    - "From pipeline environment" if the name of the scanned branch is specified in the pipeline environment variable.
+    - "Custom branch" if you need to specify a branch manually (enter a name in the Branch name field).
+
 ## [1.2.0]
 
 - Improved the vulnerability description template and added a link to download the report in HTML.

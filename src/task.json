@@ -9,7 +9,7 @@
   "author": "POSIdev-community",
   "version": {
     "Major": 1,
-    "Minor": 2,
+    "Minor": 3,
     "Patch": 0
   },
   "groups": [
@@ -97,6 +97,27 @@
       "helpMarkDown": "The name of your project on the PT Application Inspector server"
     },
     {
+      "name": "branchAtServer",
+      "type": "pickList",
+      "label": "Branch at PT AI Server",
+      "defaultValue": "fromEnvironment",
+      "visibleRule": "actionMode = scan",
+      "required": true,
+      "helpMarkDown": "Will be created if doesn't exist",
+      "options": {
+        "fromEnvironment": "From pipeline environment",
+        "customBranch": "Custom branch"
+      }
+    },
+    {
+      "name": "customBranchName",
+      "type": "string",
+      "label": "Branch name",
+      "defaultValue": "",
+      "required": true,
+      "visibleRule": "branchAtServer = customBranch"
+    },
+    {
       "name": "settingsType",
       "type": "pickList",
       "label": "Settings",
@@ -176,7 +197,7 @@
         "info": "Info",
         "warning": "Warning",
         "error": "Error",
-        "critical": "Critical",
+        "fatal": "Fatal",
         "none": "None"
       }
     },
