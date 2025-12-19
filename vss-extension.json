@@ -2,7 +2,7 @@
   "manifestVersion": 1,
   "id": "application-inspector-devops-plugin",
   "name": "PT Application Inspector",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "publisher": "POSIdev-community",
   "targets": [
     {
