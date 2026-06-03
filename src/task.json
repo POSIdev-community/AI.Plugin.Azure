@@ -10,7 +10,7 @@
   "version": {
     "Major": 1,
     "Minor": 3,
-    "Patch": 0
+    "Patch": 1
   },
   "groups": [
     {
@@ -97,27 +97,6 @@
       "helpMarkDown": "The name of your project on the PT Application Inspector server"
     },
     {
-      "name": "branchAtServer",
-      "type": "pickList",
-      "label": "Branch at PT AI Server",
-      "defaultValue": "fromEnvironment",
-      "visibleRule": "actionMode = scan",
-      "required": true,
-      "helpMarkDown": "Will be created if doesn't exist",
-      "options": {
-        "fromEnvironment": "From pipeline environment",
-        "customBranch": "Custom branch"
-      }
-    },
-    {
-      "name": "customBranchName",
-      "type": "string",
-      "label": "Branch name",
-      "defaultValue": "",
-      "required": true,
-      "visibleRule": "branchAtServer = customBranch"
-    },
-    {
       "name": "settingsType",
       "type": "pickList",
       "label": "Settings",
@@ -136,6 +115,27 @@
       "defaultValue": "",
       "required": false,
       "visibleRule": "actionMode = scan && settingsType = enterNew"
+    },
+    {
+      "name": "branchAtServer",
+      "type": "pickList",
+      "label": "Branch at PT AI Server",
+      "defaultValue": "fromEnvironment",
+      "visibleRule": "actionMode = scan && settingsType = default",
+      "required": true,
+      "helpMarkDown": "Will be created if doesn't exist",
+      "options": {
+        "fromEnvironment": "From pipeline environment",
+        "customBranch": "Custom branch"
+      }
+    },
+    {
+      "name": "customBranchName",
+      "type": "string",
+      "label": "Branch name",
+      "defaultValue": "",
+      "required": true,
+      "visibleRule": "branchAtServer = customBranch"
     },
     {
       "name": "policyFail",
