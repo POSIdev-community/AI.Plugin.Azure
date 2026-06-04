@@ -45,8 +45,8 @@ export class ScanRunner {
         );
         if (this.scanTaskContext.messageMode == MessageMode.One) scanArgs.push('--no-wait');
 
-        console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
-        let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
+        console.log(`##[debug]AI.Shell run command: ${this.redactArgs(scanArgs)}`);
+        let scanProcess = child_process.spawn('aisa', scanArgs, {stdio: 'inherit'});
         scanProcess.on('exit', () => {
             if (scanProcess.exitCode != ExitCodes.Ok) {
                 Task.setResult(Task.TaskResult.Failed, 'Checking result was failed');
@@ -57,26 +57,26 @@ export class ScanRunner {
     private startScan(scanArgs: string[]) {
         scanArgs.push(
             '--project-name',
-            `"${this.scanTaskContext.projectName}"`,
+            this.scanTaskContext.projectName,
             '--scan-target',
-            `"${this.scanTaskContext.scanDirectory}"`,
+            this.scanTaskContext.scanDirectory,
             '--create-project',
             '--create-branch',
         );
 
         if (this.scanTaskContext.settingsPath) {
             scanArgs.push('--project-settings-file');
-            scanArgs.push(`"${this.scanTaskContext.settingsPath}"`);
+            scanArgs.push(this.scanTaskContext.settingsPath);
         }
 
         if (this.scanTaskContext.policyPath) {
             scanArgs.push('--policies-path');
-            scanArgs.push(`"${this.scanTaskContext.policyPath}"`);
+            scanArgs.push(this.scanTaskContext.policyPath);
         }
 
         if (this.scanTaskContext.branchName && this.scanTaskContext.branchName.trim() !== '') {
             scanArgs.push('--branch-name');
-            scanArgs.push(`"${this.scanTaskContext.branchName}"`);
+            scanArgs.push(this.scanTaskContext.branchName);
         }
 
         scanArgs.push('--log-level');
@@ -85,8 +85,8 @@ export class ScanRunner {
         if (this.scanTaskContext.syncMode == 'async') {
             scanArgs.push('--no-wait');
 
-            console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
-            let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
+            console.log(`##[debug]AI.Shell run command: ${this.redactArgs(scanArgs)}`);
+            let scanProcess = child_process.spawn('aisa', scanArgs, {stdio: 'inherit'});
 
             scanProcess.on('exit', () => {
                 if (scanProcess.exitCode != ExitCodes.Ok) {
@@ -99,7 +99,7 @@ export class ScanRunner {
 
         if (this.scanTaskContext.reportTypes) {
             scanArgs.push('--reports-folder');
-            scanArgs.push(`"${this.scanTaskContext.reportsFolder}"`);
+            scanArgs.push(this.scanTaskContext.reportsFolder);
             scanArgs.push('--report');
             scanArgs.push(this.scanTaskContext.reportTypes);
             if (this.moreThanOnlyOneMarkdownReport()) {
@@ -107,7 +107,7 @@ export class ScanRunner {
 
                 const teamFoundationCollectionUri = Task.getVariable('System.TeamFoundationCollectionUri');
                 additionalData['OrganizationUri'] = teamFoundationCollectionUri!;
-                
+
                 const projectName = Task.getVariable('Build.Repository.Name')
                 additionalData['ProjectName'] = projectName!;
 
@@ -115,12 +115,12 @@ export class ScanRunner {
                 additionalData['BuildId'] = buildId!;
 
                 scanArgs.push('--report-additional-data');
-                scanArgs.push(JSON.stringify(JSON.stringify(additionalData)));
+                scanArgs.push(JSON.stringify(additionalData));
             }
         }
 
-        console.log(`##[debug]AI.Shell run command: ${scanArgs.join(' ')}`);
-        let scanProcess = child_process.spawn('aisa', scanArgs, {shell: true, stdio: 'inherit'});
+        console.log(`##[debug]AI.Shell run command: ${this.redactArgs(scanArgs)}`);
+        let scanProcess = child_process.spawn('aisa', scanArgs, {stdio: 'inherit'});
 
         scanProcess.on('exit', () => {
             this.handleScanFinish(scanProcess.exitCode!);
@@ -129,7 +129,7 @@ export class ScanRunner {
 
     private handleScanFinish(exitCode: ExitCodes) {
         switch (exitCode) {
-            case ExitCodes.PoliticFailed: 
+            case ExitCodes.PoliticFailed:
             case ExitCodes.FailedPoliciesAndNotCriticalError: {
                 if (this.scanTaskContext.policyFail) {
                     Task.setResult(Task.TaskResult.Failed, 'Project did not pass the security policy');
@@ -159,6 +159,15 @@ export class ScanRunner {
         if (this.scanTaskContext.reportTypes && this.moreThanOnlyOneMarkdownReport()) {
             this.uploadReports(new Set([mdFilePath]));
         }
+    }
+
+    private redactArgs(args: string[]): string {
+        const redacted = args.slice();
+        const tokenIndex = redacted.indexOf('-t');
+        if (tokenIndex !== -1 && tokenIndex + 1 < redacted.length) {
+            redacted[tokenIndex + 1] = '***';
+        }
+        return redacted.join(' ');
     }
 
     private moreThanOnlyOneMarkdownReport() {

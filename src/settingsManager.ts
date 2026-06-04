@@ -8,9 +8,7 @@ export class SettingsManager {
         const tempDirectory = Task.getVariable('Agent.TempDirectory');
         const settingsPath = path.join(tempDirectory!, '.aiproj.json');
 
-        fs.writeFile(settingsPath, settings, function (err) {
-            if (err) throw err;
-        });
+        fs.writeFileSync(settingsPath, settings);
 
         return settingsPath;
     }

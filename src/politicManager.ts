@@ -8,9 +8,7 @@ export class PoliticManager {
         const tempDirectory = Task.getVariable('Agent.TempDirectory');
         const policyPath = path.join(tempDirectory!, 'policy.json');
 
-        fs.writeFile(policyPath, politics, function (err) {
-            if (err) throw err;
-        });
+        fs.writeFileSync(policyPath, politics);
 
         return policyPath;
     }

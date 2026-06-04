@@ -1,3 +1,7 @@
+## [1.3.2]
+
+- Bugfix.
+
 ## [1.3.1]
 
 - Added support for AI.Shell 5.3.0.
